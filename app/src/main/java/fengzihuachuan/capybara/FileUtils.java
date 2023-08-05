@@ -20,7 +20,7 @@ import fengzihuachuan.capybara.subtitle.TimedTextObject;
 public class FileUtils {
     static String TAG = "FileUtils";
 
-    static String RootDirName = "LLRs";
+    static String RootDirName = "CPBRs";
 
     static String resRootDir;
     static String subtitleDir;
