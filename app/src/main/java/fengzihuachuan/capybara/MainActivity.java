@@ -4,6 +4,7 @@ import android.Manifest;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Point;
@@ -11,8 +12,10 @@ import android.os.Bundle;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.os.Environment;
 import android.os.Handler;
 import android.os.Message;
+import android.provider.Settings;
 import android.util.Log;
 import android.view.Display;
 import android.view.View;
@@ -165,9 +168,17 @@ public class MainActivity extends AppCompatActivity {
         }
     };
 
-    public Boolean checkPermission() {
-        boolean isGranted = true;
-        if (android.os.Build.VERSION.SDK_INT >= 23) {
+    public void checkPermission() {
+        if (android.os.Build.VERSION.SDK_INT >= 30) {
+            if (!Environment.isExternalStorageManager()) {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                startActivity(intent);
+                return;
+            }
+
+            return;
+        } else if (android.os.Build.VERSION.SDK_INT >= 23) {
+            boolean isGranted = true;
             if (this.checkSelfPermission(Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                 //如果没有写sd卡权限
                 isGranted = false;
@@ -185,7 +196,6 @@ public class MainActivity extends AppCompatActivity {
                         102);
             }
         }
-        return isGranted;
     }
 
     private View.OnClickListener fabOnClickListener = new View.OnClickListener() {
